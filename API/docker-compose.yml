@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: apirest
+    build: ./server
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
+      - networkapi.
+    volumes:
+      - ./server:/usr/src/app
+
+  mongo:
+    container_name: dbmongo
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - networkapi.
+    volumes:
+      - ./mongo:/data/db
+    logging:
+      driver: none
+
+    #environment:
+      #MONGO_INITDB_ROOT_USERNAME: root
+      #MONGO_INITDB_ROOT_PASSWORD: root
+
+networks:
+  networkapi.:
+    driver: "bridge"

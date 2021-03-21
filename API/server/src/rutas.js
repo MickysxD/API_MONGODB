@@ -1,6 +1,7 @@
 /*IMPORTS*/
 const Router  = require("express");
-const Casos = require("./schemas/Casos")
+const Casos = require("./schemas/Casos");
+const fs = require('fs');
 
 /*VARIABLES A UTILIZAR*/
 const app = Router();
@@ -114,6 +115,34 @@ app.post("/edades", async (req, res) => {
          console.log(err)
          res.send(err);
      });
+});
+
+/*LECTURA DE MEMORIA RAM*/
+app.post("/ram", async (req, res) => {
+    fs.readFile("./lecturas/ram_proyecto1", 'utf-8', (err, data) => {
+        if(err) {
+            console.log(err)
+            res.send(err);
+        } else {
+          req.send(JSON.parse(data))
+        }
+      });
+
+    
+});
+
+/*LECTURA DE MEMORIA CPU*/
+app.post("/cpu", async (req, res) => {
+    fs.readFile("./lecturas/cpu_proyecto1", 'utf-8', (err, data) => {
+        if(err) {
+            console.log(err)
+            res.send(err);
+        } else {
+          req.send(JSON.parse(data))
+        }
+      });
+
+    
 });
 
 

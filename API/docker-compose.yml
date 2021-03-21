@@ -10,7 +10,7 @@ services:
     networks:
       - networkapi.
     volumes:
-      - ./server:/usr/src/app
+      - /proc:/usr/src/app/lecturas
 
   mongo:
     container_name: mongodb

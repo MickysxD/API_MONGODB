@@ -19,8 +19,14 @@ struct list_head *list; //Estructura necesaria para recorrer cada lista de tarea
 
 //Mostrar PID, nombre, PID del padre y estado
 static int write_cpu(struct seq_file * cpufile, void *v){
+	int p = 0;
 	for_each_process( task ){
-		seq_printf(cpufile, "{\n");
+		if(p==0){
+			seq_printf(cpufile, "{\n");
+			p = 1;
+		}else{
+			seq_printf(cpufile, ",\n{\n");
+		}
 			seq_printf(cpufile, "\"nombre\": \"%s\",\n", task->comm);
 			seq_printf(cpufile, "\"pid\": %d,\n", task->pid);
 			seq_printf(cpufile, "\"padre\": %d,\n", task->pid);
@@ -28,18 +34,25 @@ static int write_cpu(struct seq_file * cpufile, void *v){
 			
 			seq_printf(cpufile, "\"hijos\":\n");
 			seq_printf(cpufile, "\t[\n");
+			
+			int p2 = 0;
 			list_for_each( list,&task->children ){
-				seq_printf(cpufile, "\t{\n");
+				if(p2==0){
+					p2 = 1;
+					seq_printf(cpufile, "\t{\n");
+				}else{
+					seq_printf(cpufile, ",\n\t{\n");
+				}
 				childtask= list_entry( list, struct task_struct, sibling);
 				seq_printf(cpufile, "\t\"nombre\": \"%s\",\n", childtask->comm);
 				seq_printf(cpufile, "\t\"pid\": %d,\n", childtask->pid);
 				seq_printf(cpufile, "\t\"padre\": %d,\n", task->pid);
 				seq_printf(cpufile, "\t\"estado\": %ld,\n", childtask->state);
-				seq_printf(cpufile, "\t},\n");
+				seq_printf(cpufile, "\t}");
 			}
 			seq_printf(cpufile, "\t]\n");
-
-		seq_printf(cpufile, "},\n");
+		
+		seq_printf(cpufile, "}");
 	}
 
 	return 0;

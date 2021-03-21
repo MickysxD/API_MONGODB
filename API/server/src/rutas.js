@@ -112,7 +112,7 @@ app.post("/edades", async (req, res) => {
         res.send(edades(result));
      })
      .catch(err => {
-         console.log(err)
+         console.log(err);
          res.send(err);
      });
 });
@@ -122,10 +122,10 @@ app.post("/ram", async (req, res) => {
     fs.readFile("./lecturas/ram_proyecto1", 'utf-8', (err, data) => {
         console.log(data);
         if(err) {
-            console.log(err)
+            console.log(err);
             res.send(err);
         } else {
-            req.send(JSON.parse(data))
+            res.send(JSON.parse(data));
         }
     });
 });
@@ -138,7 +138,7 @@ app.post("/cpu", async (req, res) => {
             console.log(err)
             res.send(err);
         } else {
-            req.send(JSON.parse(data))
+            res.send(JSON.parse(data))
         }
     });
 });

@@ -20,9 +20,9 @@ static int write_ram(struct seq_file * archivo, void *v){
     si_meminfo(&inf);
     long total_memoria =(inf.totalram * 4);
     long memoria_libre =(inf.freeram * 4);
-    seq_printf(archivo, "\"total\":%8lu\n", total_memoria/1024);
-    seq_printf(archivo, "\"libre\":%8lu\n", memoria_libre/1024);
-    seq_printf(archivo, "\"uso\":%8lu\n", (total_memoria-memoria_libre)/1024);
+    seq_printf(archivo, "{\"total\":%8lu,\n", total_memoria/1024);
+    seq_printf(archivo, "\"libre\":%8lu,\n", memoria_libre/1024);
+    seq_printf(archivo, "\"uso\":%8lu\n}", (total_memoria-memoria_libre)/1024);
 	return 0;
 }
 

@@ -4,14 +4,14 @@ const Casos = require("./schemas/Casos")
 
 /*VARIABLES A UTILIZAR*/
 const app = Router();
+let top = new Array;
 
 
-/*SERVICIOS PRUEBA*/
+/*SERVICIOS FINALES*/
+/*AGREGA LOS DATOS QUE ENVIAN LOS INTERMEDIARIOS*/
 app.post("/", async (req, res) => {
-    console.log("Servidor recibio");
-    
     let region = getRegion(req.body.location);
-    console.log(req.body)
+
     let nuevo = new Casos({
         name: req.body.name,
         location: req.body.location,
@@ -24,17 +24,15 @@ app.post("/", async (req, res) => {
 
     nuevo.save(nuevo)
      .then(result => {
-        //console.log(result)
         res.send(result);
      })
      .catch(err => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
-
+/*TABLA DE DATOS RECOPILADOS*/
 app.post("/find", async (req, res) => {
     Casos.find()
      .then(result => {
@@ -44,11 +42,21 @@ app.post("/find", async (req, res) => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
+/*REGIÓN MÁS INFECTADA*/
+app.post("/region", async (req, res) => {
+    Casos.find()
+     .then(result => {
+        res.send(region(result));
+     })
+     .catch(err => {
+         console.log(err)
+         res.send(err);
+     });
+});
 
-/*SERVICIOS FINALES*/
+/*TOP 5 DEPARTAMENTOS INFECTADOS*/
 app.post("/funnel", async (req, res) => {
     Casos.find()
      .then(result => {
@@ -58,10 +66,9 @@ app.post("/funnel", async (req, res) => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
-
+/*PORCENTAJE DE CASOS INFECTADOS POR STATE*/
 app.post("/circular1", async (req, res) => {
     Casos.find()
      .then(result => {
@@ -71,10 +78,9 @@ app.post("/circular1", async (req, res) => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
-
+/*PORCENTAJE DE CASOS INFECTADOS POR INFECTEDTYPE*/
 app.post("/circular2", async (req, res) => {
     Casos.find()
      .then(result => {
@@ -84,10 +90,9 @@ app.post("/circular2", async (req, res) => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
-
+/*ÚLTIMOS 5 CASOS REGISTRADOS*/
 app.post("/ultimos", async (req, res) => {
     Casos.find()
      .then(result => {
@@ -97,10 +102,9 @@ app.post("/ultimos", async (req, res) => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
-
+/*RANGO DE EDAD DE INFECTADOS*/
 app.post("/edades", async (req, res) => {
     Casos.find()
      .then(result => {
@@ -110,7 +114,6 @@ app.post("/edades", async (req, res) => {
          console.log(err)
          res.send(err);
      });
-     
 });
 
 
@@ -138,7 +141,41 @@ function getRegion(location){
     }
 }
 
-let top = new Array;
+function region(result){
+    top = new Array;
+    
+    for(let i of result){
+        agregarTop(i.region)
+    }
+
+    for(var i=1;i<top.length;i++){
+        for(var j=0; j<(top.length-i); j++){
+            if(top[j][0] < top[j+1][0]){
+                k = top[j+1][0];
+                valor = top[j+1][1];
+                
+                top[j+1][0] = top[j][0];
+                top[j+1][1] = top[j][1];
+                
+                top[j][0] = k;
+                top[j][1] = valor;
+            }
+        }
+    }
+
+    let aux = new Array;
+    for(var i=0; i < top.length; i++){
+        if(i < 1){
+            aux.push(top[i])
+            break;
+        }
+    }
+    //top.prototype.sort()
+
+    //console.log(top)
+    return aux
+}
+
 function top5Deptos(result){
     top = new Array;
     
@@ -191,10 +228,10 @@ function infectados(result, tipo){
     return top
 }
 
-function agregarTop(depto){
+function agregarTop(dato){
     let exist = false;
     for(let i in top){
-        if(top[i][1] == depto){
+        if(top[i][1] == dato){
             top[i][0]++;
             exist = true;
             break;
@@ -202,7 +239,7 @@ function agregarTop(depto){
     }
 
     if(!exist){
-        top.push([1, depto]);
+        top.push([1, dato]);
     }
 }
 

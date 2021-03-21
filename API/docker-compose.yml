@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 
 services:
   web:
@@ -6,14 +6,14 @@ services:
     build: ./server
     restart: always
     ports:
-      - "5000:5000"
+      - "80:5000"
     networks:
       - networkapi.
     volumes:
       - ./server:/usr/src/app
 
   mongo:
-    container_name: dbmongo
+    container_name: mongodb
     image: mongo
     restart: always
     ports:

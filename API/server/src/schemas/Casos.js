@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 /* localhost = mongo*/
 /*CONEXION A MONGODB*/
-mongoose.connect('mongodb://mongo:27017/prueba', {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(resutl => console.log("Conectado a db"))
+mongoose.connect('mongodb://mongo:27017/proyecto1', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(result => console.log("Conectado a db"))
     .catch(err => console.log(err));
 
 

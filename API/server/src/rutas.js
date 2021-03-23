@@ -120,12 +120,14 @@ app.post("/edades", async (req, res) => {
 /*LECTURA DE MEMORIA RAM*/
 app.post("/ram", async (req, res) => {
     fs.readFile("./lecturas/ram_proyecto1", 'utf-8', (err, data) => {
-        console.log(data);
+        //console.log(data);
+        let d = JSON.parse(data);
+        console.log(d);
         if(err) {
-            console.log(err);
+            console.log(err)
             res.send(err);
         } else {
-            res.send(JSON.parse(data));
+            res.send(d)
         }
     });
 });
@@ -133,14 +135,28 @@ app.post("/ram", async (req, res) => {
 /*LECTURA DE MEMORIA CPU*/
 app.post("/cpu", async (req, res) => {
     fs.readFile("./lecturas/cpu_proyecto1", 'utf-8', (err, data) => {
-        console.log(data);
+        //console.log(data);
+        let d = JSON.parse(data);
+        console.log(d);
         if(err) {
             console.log(err)
             res.send(err);
         } else {
-            res.send(JSON.parse(data))
+            res.send(d)
         }
     });
+});
+
+/*LECTURA DE MEMORIA RAM*/
+app.post("/clean", async (req, res) => {
+    Casos.remove()
+     .then(result => {
+        res.send(result);
+     })
+     .catch(err => {
+         console.log(err);
+         res.send(err);
+     });
 });
 
 

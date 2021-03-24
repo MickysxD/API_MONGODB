@@ -47,7 +47,7 @@ func enviarMensaje(name string, location string, age int64, infectedtype string,
 		log.Fatalf("CLIENTE:  error 2 ", err)
 	}
 
-	//println("CLIENTE: resultado ", res.Result)
+	println("CLIENTE: resultado ", res.Result)
 
 }
 
@@ -62,8 +62,7 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var d Data
-		err := json.NewDecoder(r.Body).Decode(&d)
-		if err != nil {
+		if json.NewDecoder(r.Body).Decode(&d) != nil {
 			//println("CLIENTE: error 3")
 		} else {
 			enviarMensaje(d.Name, d.Location, d.Age, d.Infectedtype, d.State)
